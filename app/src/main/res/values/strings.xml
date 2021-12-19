@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">You Age in Minutes</string>
+  <string name="calculate_tour">CALCULATE TOUR</string>
+  <string name="age">AGE</string>
+</resources>
