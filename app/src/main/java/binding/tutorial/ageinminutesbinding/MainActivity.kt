@@ -2,7 +2,6 @@ package binding.tutorial.ageinminutesbinding
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.os.LocaleList
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun clickDatePicker(view: View) {
+    private fun clickDatePicker(view: View) {
         // カレンダーインスタンス作成
         val myCalendar = Calendar.getInstance()
         // 現在年
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         val day = myCalendar.get(Calendar.DAY_OF_MONTH)
         println(year)
 
-        DatePickerDialog(
+        val dpd = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, selectedYear, selectedMonth, selectedDayOfMonth ->
                 // 内容が変更されたときに呼び出される(OK押下時)
@@ -53,7 +52,23 @@ class MainActivity : AppCompatActivity() {
 
                 // 定義したフォーマットで文字列を解析してDateオブジェクトを生成
                 val theDate = sdf.parse(selectedDate)
+                println("----  ${theDate.time}")
+
+                val selectedDateInMinutes = theDate!!.time / 60000
+                // 現在の時間（ミリ秒単位）でフォーマット 日付オブジェクトが返ってくる
+                val currentDate = sdf.parse(sdf.format(System.currentTimeMillis()))
+                println("現在時間 $currentDate")
+
+                val currentDateToMinutes = currentDate!!.time / 60000
+
+                val differenceInMinutes = currentDateToMinutes - selectedDateInMinutes
+
+                binding.tvAgeInMinutes.text = differenceInMinutes.toString()
             }, year, month, day
-        ).show()
+        )
+
+        // カレンダーの最大値を設定
+        dpd.datePicker.maxDate = Date().time - 864000000
+        dpd.show()
     }
 }
